@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="YUVFrameAlignment:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/YUVFrameAlignment_jar</output-path>
+    <root id="archive" name="YUVFrameAlignment.jar">
+      <element id="module-output" name="YUVFrameAlignment" />
+    </root>
+  </artifact>
+</component>
