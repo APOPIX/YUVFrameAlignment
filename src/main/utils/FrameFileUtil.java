@@ -23,7 +23,7 @@ public class FrameFileUtil {
 
     /**
      * @param filename 压缩文件名或者未压缩文件名
-     * @param entry 若指定压缩文件名，则需要指定entry
+     * @param entry    若指定压缩文件名，则需要指定entry
      */
     public static void initOutputStream(String filename, String entry) {
         File outputFile = new File(filename);
@@ -41,7 +41,7 @@ public class FrameFileUtil {
         //创建输出流缓存
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-            if (!entry.isBlank()){
+            if (!entry.isBlank()) {
                 zipOutputEntry = new ZipEntry(entry);
                 zipOutputStream = new ZipOutputStream(outputStream);
                 zipOutputStream.putNextEntry(zipOutputEntry);
@@ -64,8 +64,7 @@ public class FrameFileUtil {
         try {
             inputStream = new BufferedInputStream(new FileInputStream(inputFile));
             zipInputStream = new ZipInputStream(inputStream);
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
-            System.out.println("entry: " + zipEntry.getName());
+            zipInputStream.getNextEntry();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -155,7 +154,7 @@ public class FrameFileUtil {
      * @return FrameData类
      */
 
-    public static FrameData readNextFrameDataFromFile(int width, int height, int xBegin, int yBegin, int sideLength)  {
+    public static FrameData readNextFrameDataFromFile(int width, int height, int xBegin, int yBegin, int sideLength) {
         FrameData outputFrame = new FrameData(width, height);
         int toRead = width * height * 3 / 2;//总共需要读取的字节数
         int readed = 0;//已读取的字节数
@@ -163,12 +162,12 @@ public class FrameFileUtil {
             //https://docs.oracle.com/javase/8/docs/api/java/io/BufferedInputStream.html#read-byte:A-int-int-
             while (toRead > 0) {
                 int newRead = zipInputStream.read(outputFrame.I420Picture, readed, toRead);//记录本次读取到的字节数
-                if(newRead<0){
+                if (newRead < 0) {
 //                    System.out.println("readNextFrameDataFromFile: 读取数据流意外中断：到达文件结尾");
                     return null;
                 }
-                readed+=newRead;
-                toRead-=newRead;
+                readed += newRead;
+                toRead -= newRead;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -176,6 +175,37 @@ public class FrameFileUtil {
         outputFrame.width = width;
         outputFrame.height = height;
         outputFrame.timeStamp = readTimeStamp(outputFrame.I420Picture, width, xBegin, yBegin, sideLength);
+        return outputFrame;
+    }
+
+    /**
+     * 返回一个被裁掉顶部高度为cutHeight部分的yuv视频帧
+     *
+     * @param cutHeight 欲裁掉的高度
+     * @param width     原视频宽度
+     * @param height    原视频高度
+     * @param frame     原视频I420数据
+     * @return 裁剪后的视频帧
+     */
+    public static FrameData frameCut(int cutHeight, int width, int height, byte[] frame) {
+        FrameData outputFrame = new FrameData(width, height - cutHeight);
+        int yLength = width * height;
+        int cutULength = cutHeight * width  / 4;
+        int cutVLength = cutHeight * width  / 4;
+        int pointer = 0;
+        //存入裁剪后的Y像素
+        for (int i = cutHeight * width; i < yLength; i++) {
+            outputFrame.I420Picture[pointer++] = frame[i];
+        }
+        //存入裁剪后的U像素
+        for (int i = yLength + cutULength; i < yLength + yLength/4; i++) {
+            outputFrame.I420Picture[pointer++] = frame[i];
+        }
+        //存入裁剪后的V像素
+        for (int i = yLength +  yLength/4 + cutVLength; i < yLength + yLength/2; i++) {
+            outputFrame.I420Picture[pointer++] = frame[i];
+        }
+
         return outputFrame;
     }
 
