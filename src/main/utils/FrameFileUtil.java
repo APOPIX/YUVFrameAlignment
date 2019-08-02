@@ -41,7 +41,7 @@ public class FrameFileUtil {
         //创建输出流缓存
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-            if (!entry.isBlank()) {
+            if (!entry.isEmpty()) {
                 zipOutputEntry = new ZipEntry(entry);
                 zipOutputStream = new ZipOutputStream(outputStream);
                 zipOutputStream.putNextEntry(zipOutputEntry);

@@ -15,7 +15,7 @@ public class Main {
     private static int width = 720, height = 1280;
 
     public static void main(String[] args) {
-        if (args.length > 0 && !args[0].isBlank() && args[0].equals("help")) {
+        if (args.length > 0 && !args[0].isEmpty() && args[0].equals("help")) {
 
             System.out.println("使用说明：\n" +
                     "从左到右依次传入四个路径和视频宽高\n" +
@@ -28,22 +28,22 @@ public class Main {
                     "例：java -jar YUVFrameAlignment.jar indexed.zip received.zip indexed_trimmed.yuv received_trimmed.yuv 368 640");
             return;
         }
-        if (args.length > 0 && !args[0].isBlank()) {
+        if (args.length > 0 && !args[0].isEmpty()) {
             sentZipPath = args[0];
         }
-        if (args.length > 1 && !args[1].isBlank()) {
+        if (args.length > 1 && !args[1].isEmpty()) {
             rcvZipPath = args[1];
         }
-        if (args.length > 2 && !args[2].isBlank()) {
+        if (args.length > 2 && !args[2].isEmpty()) {
             sentOutputRawPath = args[2];
         }
-        if (args.length > 3 && !args[3].isBlank()) {
+        if (args.length > 3 && !args[3].isEmpty()) {
             rcvOutputRawPath = args[3];
         }
-        if (args.length > 4 && !args[4].isBlank()) {
+        if (args.length > 4 && !args[4].isEmpty()) {
             width = Integer.parseInt(args[4]);
         }
-        if (args.length > 5 && !args[5].isBlank()) {
+        if (args.length > 5 && !args[5].isEmpty()) {
             height = Integer.parseInt(args[5]);
         }
         int sideLength = width / 64;
