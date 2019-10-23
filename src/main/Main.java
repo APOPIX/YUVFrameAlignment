@@ -77,7 +77,7 @@ public class Main {
                 trimmedIndexList.add(i);
             }
         }
-
+        int writtenFrame = 0;//控制生成文件大小
         long lastIndex = 0;//控制单向查找，避免重复帧
         System.out.println("正在生成对齐后的原始视频帧");
         //处理发送的文件
@@ -105,9 +105,9 @@ public class Main {
         //处理接收的文件
         System.out.println("正在生成对齐后的接收视频帧");
         lastIndex = 0;//控制单向查找，避免重复帧
+        writtenFrame = 0;
         FrameFileUtil.initInputStream(rcvZipPath);
         FrameFileUtil.initOutputStream(rcvOutputRawPath, "");//对齐后的原始文件
-
         while (true) {
             frameData = FrameFileUtil.readNextFrameDataFromFile(width, height, 0, 0, sideLength);
             System.out.print("\r正在处理第" + frameCount++ + "帧");

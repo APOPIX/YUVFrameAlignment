@@ -12,9 +12,9 @@ import static main.utils.TimeStampUtil.readTimeStamp;
  *
  */
 public class FrameFileUtil {
-    private static BufferedOutputStream outputStream = null;//输出缓冲区，需要初始化
+    private static OutputStream outputStream = null;//输出缓冲区，需要初始化
     private static ZipOutputStream zipOutputStream = null;//压缩输出缓冲区，需要初始化
-    private static BufferedInputStream inputStream = null;//输入缓冲区，需要初始化
+    private static InputStream inputStream = null;//输入缓冲区，需要初始化
     private static ZipInputStream zipInputStream = null;//压缩输入缓冲区，需要初始化
     private static ZipEntry zipOutputEntry = null;
     private static boolean outputStreamInitiated = false;
@@ -40,7 +40,7 @@ public class FrameFileUtil {
         }
         //创建输出流缓存
         try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
+            outputStream = new FileOutputStream(outputFile);
             if (!entry.isEmpty()) {
                 zipOutputEntry = new ZipEntry(entry);
                 zipOutputStream = new ZipOutputStream(outputStream);
@@ -62,7 +62,7 @@ public class FrameFileUtil {
         File inputFile = new File(filename);
         //创建输入流缓存
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(inputFile));
+            inputStream = new FileInputStream(inputFile);
             zipInputStream = new ZipInputStream(inputStream);
             zipInputStream.getNextEntry();
         } catch (FileNotFoundException e) {
